@@ -1,0 +1,37 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build output
+dist/
+build/
+out/
+.next/
+.turbo/
+*.tsbuildinfo
+
+# test and coverage
+coverage/
+
+# env and secrets (never commit real secrets; .env.example is tracked)
+.env
+.env.local
+.env.*.local
+*.pem
+
+# editor and os
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# deploy
+.vercel
+
+# local data volumes
+.data/

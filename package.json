@@ -1,0 +1,38 @@
+{
+  "name": "beckon",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Open source, embeddable AI copilot layer for web apps.",
+  "license": "MIT",
+  "packageManager": "pnpm@10.13.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "typecheck": "turbo run typecheck",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "eval": "tsx evals/run.ts",
+    "infra:up": "docker compose up -d",
+    "infra:down": "docker compose down",
+    "infra:logs": "docker compose logs -f",
+    "db:generate": "pnpm --filter @beckon/db generate",
+    "db:migrate": "pnpm --filter @beckon/db migrate",
+    "db:push": "pnpm --filter @beckon/db push",
+    "db:seed": "pnpm --filter @beckon/db seed"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "tsx": "^4.19.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^2.1.8"
+  }
+}
