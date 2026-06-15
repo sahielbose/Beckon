@@ -7,7 +7,7 @@ Legend: not started, in progress, done.
 | # | Section | Status | Notes |
 |---|---------|--------|-------|
 | 1 | Foundation and Infrastructure | done | monorepo, db schema (21 tables), shared contracts, infra, eval harness; migrate + seed verified on live pgvector |
-| 2 | Design System and Shared UI | not started | |
+| 2 | Design System and Shared UI | done | tokens, preset, fonts, 22 primitives, motion, brand, command surface; console scaffold + /preview renders all |
 | 3 | Authentication, Organizations, API Keys | not started | |
 | 4 | Marketing Site | not started | |
 | 5 | App Shell and Navigation | not started | |
