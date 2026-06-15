@@ -1,0 +1,71 @@
+# Local development stack for Beckon: Postgres with pgvector, Redis, and MinIO.
+# Bring it up with `pnpm infra:up`. The app servers run on the host with `pnpm dev`.
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: beckon-postgres
+    environment:
+      POSTGRES_USER: beckon
+      POSTGRES_PASSWORD: beckon
+      POSTGRES_DB: beckon
+    ports:
+      - "5432:5432"
+    volumes:
+      - beckon-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U beckon -d beckon"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: beckon-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - beckon-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    container_name: beckon-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio12345
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - beckon-minio:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # One shot: create the uploads bucket so the app has somewhere to store files.
+  minio-setup:
+    image: minio/mc:latest
+    container_name: beckon-minio-setup
+    depends_on:
+      minio:
+        condition: service_started
+    entrypoint: >
+      /bin/sh -c "
+      until (mc alias set local http://minio:9000 minio minio12345) do echo 'waiting for minio'; sleep 2; done;
+      mc mb --ignore-existing local/beckon;
+      mc anonymous set none local/beckon;
+      echo 'minio bucket ready';
+      "
+
+volumes:
+  beckon-postgres:
+  beckon-redis:
+  beckon-minio:
