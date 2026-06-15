@@ -4,7 +4,26 @@ Engineering decisions made while building Beckon that are not spelled out in the
 context document or the implementation guide. Newest at the top. Each entry: what was
 decided, and why.
 
-## 2026-06-15
+## 2026-06-15 (Section 2)
+
+- **D-009 Console app scaffolded in Section 2.** Section 2's done criterion is a
+  component preview route, which needs a Next app to render. We scaffold
+  `apps/console` (Next.js 15, App Router, React 19) now and build out its marketing
+  and dashboard surfaces in Sections 4 and 5.
+
+- **D-010 Tailwind v3, not v4.** Tailwind v3.4 with PostCSS is the well trodden path
+  for shadcn primitives and a shared monorepo preset. We map the design tokens to
+  Tailwind via CSS variables so theming stays in one place.
+
+- **D-011 Fonts self hosted via next/font and the `geist` package.** Geist Sans for
+  display, Inter for body, Geist Mono for the monospace command surface. next/font
+  and the `geist` package self host the files at build time, satisfying the no
+  hotlink rule.
+
+- **D-012 Toasts via `sonner`, primitives via Radix.** shadcn style primitives are
+  built on Radix UI (MIT) and themed to our tokens. Toasts use `sonner` (MIT).
+
+## 2026-06-15 (Section 1)
 
 - **D-001 Existing README replaced.** The repo shipped with a README describing a
   "personal command bar" (the consumer reframe). Per BECKON-CONTEXT.md Section 0 we
