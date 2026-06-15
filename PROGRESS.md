@@ -6,7 +6,7 @@ Legend: not started, in progress, done.
 
 | # | Section | Status | Notes |
 |---|---------|--------|-------|
-| 1 | Foundation and Infrastructure | in progress | monorepo, db schema, shared contracts, infra, eval harness |
+| 1 | Foundation and Infrastructure | done | monorepo, db schema (21 tables), shared contracts, infra, eval harness; migrate + seed verified on live pgvector |
 | 2 | Design System and Shared UI | not started | |
 | 3 | Authentication, Organizations, API Keys | not started | |
 | 4 | Marketing Site | not started | |
@@ -26,9 +26,9 @@ Legend: not started, in progress, done.
 
 ## Section 1 checklist
 
-- [ ] Contract lock: full Drizzle schema in `packages/db`, mirrored types and Zod in `packages/shared`
-- [ ] Repo and tooling: pnpm workspace, Turborepo, tsconfig base, Biome, gitignore, editorconfig, MIT license
-- [ ] Infrastructure: docker-compose (Postgres+pgvector, Redis, MinIO), .env.example, bootstrap
-- [ ] Database: Drizzle schema for every table, migrations, typed client, seed scaffold
-- [ ] Shared and evals: Zod schemas for tools, actions, chat events; Vitest eval runner; pnpm eval
-- [ ] Done when: pnpm install, pnpm typecheck, pnpm lint, pnpm eval all green; README explains setup
+- [x] Contract lock: full Drizzle schema in `packages/db`, mirrored types and Zod in `packages/shared`
+- [x] Repo and tooling: pnpm workspace, Turborepo, tsconfig base, Biome, gitignore, editorconfig, MIT license
+- [x] Infrastructure: docker-compose (Postgres+pgvector, Redis, MinIO), .env.example
+- [x] Database: Drizzle schema for every table, migrations, typed client, seed scaffold
+- [x] Shared and evals: Zod schemas for tools, actions, chat events; Vitest eval runner; pnpm eval
+- [x] Done when: pnpm install, typecheck, lint, test, eval all green; migrate + seed verified on live pgvector; README explains setup
