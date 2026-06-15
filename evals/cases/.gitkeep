@@ -1,0 +1,2 @@
+# Golden eval cases live here, in files named *.cases.ts grouped by category.
+# Each feature section adds its own cases. Section 14 consolidates them.
