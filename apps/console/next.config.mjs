@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@beckon/ui", "@beckon/shared", "@beckon/db"],
-  // Postgres driver runs only on the server; keep it out of the bundle.
-  serverExternalPackages: ["postgres"],
+  transpilePackages: ["@beckon/ui", "@beckon/shared", "@beckon/db", "@beckon/agent-core"],
+  // These run only on the server; keep them out of the client bundle.
+  serverExternalPackages: ["postgres", "@anthropic-ai/sdk", "openai"],
   eslint: { ignoreDuringBuilds: true },
 }
 

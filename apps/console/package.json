@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.4",
+    "@beckon/agent-core": "workspace:*",
     "@beckon/db": "workspace:*",
     "@beckon/shared": "workspace:*",
     "@beckon/ui": "workspace:*",
