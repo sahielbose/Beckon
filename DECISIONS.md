@@ -4,6 +4,27 @@ Engineering decisions made while building Beckon that are not spelled out in the
 context document or the implementation guide. Newest at the top. Each entry: what was
 decided, and why.
 
+## 2026-06-15 (Section 3)
+
+- **D-013 Auth.js v5 with JWT session strategy.** The email and password path uses
+  the Credentials provider, which Auth.js only supports with the JWT session
+  strategy (database sessions are incompatible with Credentials). Users, accounts,
+  organizations, and memberships are persisted in Postgres via the Drizzle adapter,
+  so identity is database backed even though the session token itself is a signed
+  JWT cookie. OAuth providers use the same flow. The `sessions` table is kept for
+  adapter compatibility.
+
+- **D-014 Password hashing with node:crypto scrypt; key hashing with SHA-256.**
+  Passwords use scrypt (built into node, no dependency, salted, slow by design).
+  API keys and embed tokens are high entropy random strings, so a fast SHA-256 hash
+  is sufficient and is the same algorithm used by the runtime to look a token up.
+  Only a short plaintext prefix plus the hash are stored. The full token is shown
+  once at creation.
+
+- **D-015 Org bootstrap on first sign in.** A user's first organization and owner
+  membership are created lazily the first time they reach the app, in one helper
+  used by both the credentials sign up and OAuth sign in paths.
+
 ## 2026-06-15 (Section 2)
 
 - **D-009 Console app scaffolded in Section 2.** Section 2's done criterion is a
