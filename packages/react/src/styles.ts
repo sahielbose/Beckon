@@ -40,6 +40,7 @@ export const WIDGET_STYLES = `
   width: 380px; max-width: calc(100vw - 40px); height: 560px; max-height: calc(100vh - 40px);
 }
 .beckon-panel.sidebar { height: 100%; width: 100%; border-radius: 0; border: none; border-left: 1px solid var(--line); }
+.beckon-panel.inline { height: 100%; width: 100%; }
 
 .beckon-header {
   display: flex; align-items: center; justify-content: space-between;

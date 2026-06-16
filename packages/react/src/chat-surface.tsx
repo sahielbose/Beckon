@@ -15,7 +15,7 @@ export function ChatSurface({
 }: {
   config: BeckonConfig
   title?: string
-  variant?: "floating" | "sidebar"
+  variant?: "floating" | "sidebar" | "inline"
   onClose?: () => void
   styleRoot?: Document | ShadowRoot
 }) {
