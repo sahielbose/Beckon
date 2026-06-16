@@ -40,9 +40,24 @@ export function Transcript({
   actionEvents: ActionEvent[]
 }) {
   const items: Item[] = [
-    ...messages.map((m, i) => ({ at: m.createdAt.getTime(), key: `m${i}`, kind: "message" as const, data: m })),
-    ...toolCalls.map((t, i) => ({ at: t.createdAt.getTime(), key: `t${i}`, kind: "tool" as const, data: t })),
-    ...actionEvents.map((a, i) => ({ at: a.createdAt.getTime(), key: `a${i}`, kind: "action" as const, data: a })),
+    ...messages.map((m, i) => ({
+      at: m.createdAt.getTime(),
+      key: `m${i}`,
+      kind: "message" as const,
+      data: m,
+    })),
+    ...toolCalls.map((t, i) => ({
+      at: t.createdAt.getTime(),
+      key: `t${i}`,
+      kind: "tool" as const,
+      data: t,
+    })),
+    ...actionEvents.map((a, i) => ({
+      at: a.createdAt.getTime(),
+      key: `a${i}`,
+      kind: "action" as const,
+      data: a,
+    })),
   ].sort((a, b) => a.at - b.at)
 
   if (items.length === 0) {
