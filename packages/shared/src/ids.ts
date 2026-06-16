@@ -33,6 +33,7 @@ export const ID_PREFIXES = {
   toolCall: "tc",
   actionEvent: "ae",
   session: "sess",
+  invitation: "inv",
 } as const
 
 export type IdEntity = keyof typeof ID_PREFIXES

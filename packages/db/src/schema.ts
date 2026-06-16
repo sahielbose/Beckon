@@ -213,6 +213,9 @@ export const knowledgeSources = pgTable(
     type: text("type").$type<KnowledgeSourceType>().notNull(),
     name: text("name").notNull(),
     sourceUri: text("source_uri"),
+    // Object storage key of the original uploaded file, so re-indexing never
+    // requires re-uploading. Null for URL sources.
+    storageKey: text("storage_key"),
     status: text("status").$type<KnowledgeSourceStatus>().notNull().default("pending"),
     sizeBytes: integer("size_bytes"),
     error: text("error"),
@@ -478,5 +481,33 @@ export const actionEvents = pgTable(
   },
   (t) => ({
     conversationIdx: index("action_events_conversation_idx").on(t.conversationId),
+  }),
+)
+
+// ---------------------------------------------------------------------------
+// Team invitations (sent by email; accepted to join an organization)
+// ---------------------------------------------------------------------------
+
+export const invitations = pgTable(
+  "invitations",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => newId("invitation")),
+    orgId: text("org_id")
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    email: text("email").notNull(),
+    role: text("role").$type<MembershipRole>().notNull().default("member"),
+    // SHA-256 of the single use invite token. The token itself is only in the link.
+    tokenHash: text("token_hash").notNull(),
+    invitedBy: text("invited_by").references(() => users.id, { onDelete: "set null" }),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    acceptedAt: timestamp("accepted_at", { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => ({
+    orgIdx: index("invitations_org_idx").on(t.orgId),
+    tokenIdx: index("invitations_token_idx").on(t.tokenHash),
   }),
 )
