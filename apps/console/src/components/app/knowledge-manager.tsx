@@ -31,6 +31,8 @@ export type SourceRow = {
   status: StatusValue
   error: string | null
   created: string
+  // URLs always re-index; files re-index when their original is in storage.
+  reindexable: boolean
 }
 
 export function KnowledgeManager({
@@ -109,7 +111,7 @@ export function KnowledgeManager({
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center justify-end gap-1">
-                    {source.type === "url" ? (
+                    {source.reindexable ? (
                       <form action={reindexSourceAction}>
                         <input type="hidden" name="agentId" value={agentId} />
                         <input type="hidden" name="sourceId" value={source.id} />

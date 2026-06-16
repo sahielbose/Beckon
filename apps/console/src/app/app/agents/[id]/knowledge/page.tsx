@@ -14,6 +14,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ id: 
     status: s.status as StatusValue,
     error: s.error,
     created: new Date(s.createdAt).toLocaleDateString(),
+    reindexable: s.type === "url" || Boolean(s.storageKey),
   }))
 
   return (

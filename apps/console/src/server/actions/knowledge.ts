@@ -1,7 +1,8 @@
 "use server"
 
 import { requireOrgId } from "@/server/current"
-import { ingestSource } from "@/server/rag/ingest"
+import { runIngestion } from "@/server/queue/queue"
+import { deleteObject, isStorageConfigured, putObject, sourceObjectKey } from "@/server/storage/s3"
 import { agents, db, knowledgeSources } from "@beckon/db"
 import { and, eq } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
@@ -48,7 +49,7 @@ export async function addUrlSourceAction(
     })
     .returning()
 
-  await ingestSource(source.id)
+  await runIngestion(source.id)
   revalidatePath(knowledgePath(agentId))
   return {}
 }
@@ -70,7 +71,30 @@ export async function addFileSourceAction(formData: FormData): Promise<void> {
     .values({ agentId, type: "file", name: file.name, status: "pending", sizeBytes: file.size })
     .returning()
 
-  await ingestSource(source.id, buffer)
+  if (isStorageConfigured()) {
+    // Persist the original so re-indexing never needs a re-upload.
+    const key = sourceObjectKey(agentId, source.id, file.name)
+    try {
+      await putObject(key, buffer, file.type || "application/octet-stream")
+      await db
+        .update(knowledgeSources)
+        .set({ storageKey: key })
+        .where(eq(knowledgeSources.id, source.id))
+      await runIngestion(source.id)
+    } catch (error) {
+      await db
+        .update(knowledgeSources)
+        .set({
+          status: "error",
+          error: error instanceof Error ? error.message : "Could not store the file.",
+        })
+        .where(eq(knowledgeSources.id, source.id))
+    }
+  } else {
+    // No storage configured: ingest once from the buffer in hand.
+    await runIngestion(source.id, { buffer })
+  }
+
   revalidatePath(knowledgePath(agentId))
 }
 
@@ -79,9 +103,20 @@ export async function removeSourceAction(formData: FormData): Promise<void> {
   const agentId = String(formData.get("agentId") ?? "")
   await assertAgentInOrg(agentId, orgId)
   const sourceId = String(formData.get("sourceId") ?? "")
+  const existing = (
+    await db
+      .select({ storageKey: knowledgeSources.storageKey })
+      .from(knowledgeSources)
+      .where(and(eq(knowledgeSources.id, sourceId), eq(knowledgeSources.agentId, agentId)))
+      .limit(1)
+  )[0]
   await db
     .delete(knowledgeSources)
     .where(and(eq(knowledgeSources.id, sourceId), eq(knowledgeSources.agentId, agentId)))
+  // Best effort cleanup of the stored original.
+  if (existing?.storageKey) {
+    await deleteObject(existing.storageKey).catch(() => {})
+  }
   revalidatePath(knowledgePath(agentId))
 }
 
@@ -90,6 +125,11 @@ export async function reindexSourceAction(formData: FormData): Promise<void> {
   const agentId = String(formData.get("agentId") ?? "")
   await assertAgentInOrg(agentId, orgId)
   const sourceId = String(formData.get("sourceId") ?? "")
-  await ingestSource(sourceId)
+  // Works for URLs (re-fetch) and files (re-read from storage), no re-upload.
+  await db
+    .update(knowledgeSources)
+    .set({ status: "pending", error: null })
+    .where(and(eq(knowledgeSources.id, sourceId), eq(knowledgeSources.agentId, agentId)))
+  await runIngestion(sourceId)
   revalidatePath(knowledgePath(agentId))
 }
