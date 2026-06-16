@@ -3,12 +3,24 @@ import {
   allowedOrigins,
   apiKeys,
   db,
+  gatewayConfigs,
   knowledgeSources,
   memberships,
   organizations,
+  tools,
   users,
 } from "@beckon/db"
-import { and, desc, eq } from "drizzle-orm"
+import { and, asc, desc, eq } from "drizzle-orm"
+
+export async function listTools(agentId: string) {
+  return db.select().from(tools).where(eq(tools.agentId, agentId)).orderBy(asc(tools.name))
+}
+
+export async function getGatewayConfig(agentId: string) {
+  return (
+    await db.select().from(gatewayConfigs).where(eq(gatewayConfigs.agentId, agentId)).limit(1)
+  )[0]
+}
 
 export async function listKnowledgeSources(agentId: string) {
   return db
