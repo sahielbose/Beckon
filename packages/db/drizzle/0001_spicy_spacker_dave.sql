@@ -1,0 +1,1 @@
+ALTER TABLE "gateway_configs" ADD COLUMN "shared_secret_encrypted" text;

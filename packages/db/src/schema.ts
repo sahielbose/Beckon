@@ -286,6 +286,9 @@ export const tools = pgTable(
     parametersSchema: jsonb("parameters_schema").$type<JsonSchema>().notNull().default({}),
     httpMethod: text("http_method").$type<HttpMethod>(),
     pathTemplate: text("path_template"),
+    // How to map flat tool args to the request: which params are path/query/header
+    // and which property names form the JSON body.
+    routing: jsonb("routing").$type<Record<string, unknown>>(),
     sideEffect: boolean("side_effect").notNull().default(false),
     requiresConfirmation: boolean("requires_confirmation").notNull().default(false),
     enabled: boolean("enabled").notNull().default(true),
@@ -335,6 +338,9 @@ export const gatewayConfigs = pgTable(
     authSecretEncrypted: text("auth_secret_encrypted"),
     authHeaderName: text("auth_header_name"),
     sharedSecretHash: text("shared_secret_hash"),
+    // Encrypted at rest. Beckon needs the value to sign each request so the host
+    // can verify the call came from Beckon.
+    sharedSecretEncrypted: text("shared_secret_encrypted"),
     rateLimitPerMin: integer("rate_limit_per_min").notNull().default(DEFAULT_RATE_LIMIT_PER_MIN),
     allowedOperations: jsonb("allowed_operations").$type<string[]>().notNull().default([]),
     createdAt: createdAt(),
