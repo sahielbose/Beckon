@@ -13,7 +13,7 @@ Legend: not started, in progress, done.
 | 5 | App Shell and Navigation | done | sidebar with agent switcher + per agent nav, top bar with breadcrumbs and account menu, agents overview + create flow, all 8 tab routes (stubs for later sections), settings in shell |
 | 6 | Agent Core (runtime and verbs) | done | provider abstraction (stub default + claude/openai), tool registry, orchestration loop with confirmation pause, 3 SSE endpoints; verified end to end over HTTP (origin allowlist, streaming, confirm round trip, persistence); tool-plan + confirmation evals green |
 | 7 | Knowledge and Retrieval (RAG) | done | embedder (stub + openai), chunker, file/url extraction, inline ingestion, pgvector retriever wired into runtime, Knowledge tab; verified ingest to grounded retrieval on live pgvector; rag-grounding evals green |
-| 8 | Tools: OpenAPI Import and the Gateway | not started | |
+| 8 | Tools: OpenAPI Import and the Gateway | done | openapi parser, the Beckon Gateway (validate, rate limit, shared secret signing, encrypted host auth, secret redacted logs), Tools tab, runtime routes server tools through the gateway; openapi-mapping + gateway-guard evals green (incl. secret redaction) |
 | 9 | SDK and Embeddable Widget | not started | |
 | 10 | Playground and Install | not started | |
 | 11 | Flows and Guardrails | not started | |
