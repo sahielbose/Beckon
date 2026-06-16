@@ -38,6 +38,34 @@ function okFetch(calls: string[]): typeof fetch {
 
 export const cases = defineCases("gateway-guard", [
   {
+    id: "gateway-guard/never-retries-writes",
+    description: "A failing write is attempted once, so a side effect is never duplicated",
+    run: async () => {
+      resetRateLimits()
+      let calls = 0
+      const failing = (async () => {
+        calls++
+        return new Response("err", { status: 503 })
+      }) as typeof fetch
+      await callOperation(baseConfig(), op("createClient"), { name: "Acme" }, { fetch: failing })
+      return check(calls === 1, `the write was attempted ${calls} times`)
+    },
+  },
+  {
+    id: "gateway-guard/retries-idempotent-reads",
+    description: "A failing read is retried with backoff",
+    run: async () => {
+      resetRateLimits()
+      let calls = 0
+      const failing = (async () => {
+        calls++
+        return new Response("err", { status: 503 })
+      }) as typeof fetch
+      await callOperation(baseConfig(), op("listClients"), {}, { fetch: failing })
+      return check(calls === 3, `the read was attempted ${calls} times`)
+    },
+  },
+  {
     id: "gateway-guard/rejects-disallowed-operation",
     description: "An operation not on the allowlist is rejected without calling the host",
     run: async () => {
