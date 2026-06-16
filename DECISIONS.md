@@ -4,6 +4,29 @@ Engineering decisions made while building Beckon that are not spelled out in the
 context document or the implementation guide. Newest at the top. Each entry: what was
 decided, and why.
 
+## 2026-06-15 (Section 6)
+
+- **D-016 Provider abstraction with a stub default.** `agent-core` defines a
+  `ChatProvider` interface. The StubProvider runs offline with deterministic,
+  rule based tool planning so the loop, the confirmation gating, and the evals all
+  run with no API keys. Real Anthropic and OpenAI providers are implemented with the
+  official SDKs and selected only when a key is present (or forced off by
+  BECKON_STUB_LLM). The real providers are unverified until keys arrive in Section 17;
+  they are clearly the non default path.
+
+- **D-017 Confirmation pause via a pending registry.** A side effecting tool or
+  action emits a confirmation_request and the loop awaits a deferred keyed by the
+  event id. The widget reports the decision (and later the client action result) to
+  POST /api/action-result, which settles the deferred and the loop continues on the
+  same SSE stream. The default registry is in memory, which is correct for a single
+  node process (self host) and Next dev. Multi instance hosting needs a Redis backed
+  registry; the interface allows swapping it in Section 15. This is documented, not
+  hidden.
+
+- **D-018 Conversation backed sessions.** A session is a conversation row. Message
+  history is persisted in the messages table and reloaded each turn, so multi turn
+  chat survives across requests without server memory.
+
 ## 2026-06-15 (Section 3)
 
 - **D-013 Auth.js v5 with JWT session strategy.** The email and password path uses
