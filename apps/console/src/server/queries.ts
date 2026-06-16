@@ -3,7 +3,9 @@ import {
   allowedOrigins,
   apiKeys,
   db,
+  flows,
   gatewayConfigs,
+  guardrails,
   knowledgeSources,
   memberships,
   organizations,
@@ -11,6 +13,14 @@ import {
   users,
 } from "@beckon/db"
 import { and, asc, desc, eq } from "drizzle-orm"
+
+export async function listFlows(agentId: string) {
+  return db.select().from(flows).where(eq(flows.agentId, agentId)).orderBy(desc(flows.createdAt))
+}
+
+export async function getGuardrailsRow(agentId: string) {
+  return (await db.select().from(guardrails).where(eq(guardrails.agentId, agentId)).limit(1))[0]
+}
 
 export async function listTools(agentId: string) {
   return db.select().from(tools).where(eq(tools.agentId, agentId)).orderBy(asc(tools.name))
