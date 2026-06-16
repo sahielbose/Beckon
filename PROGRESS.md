@@ -10,7 +10,7 @@ Legend: not started, in progress, done.
 | 2 | Design System and Shared UI | done | tokens, preset, fonts, 22 primitives, motion, brand, command surface; console scaffold + /preview renders all |
 | 3 | Authentication, Organizations, API Keys | done | auth.js (credentials + optional github), org bootstrap, org scoping, secret keys (reveal once) + embed tokens + origin allowlist, settings; cross tenant isolation tested on live db |
 | 4 | Marketing Site | done | nav with auth aware Open app handoff, footer, home hero (command surface preview), how it works, use cases, pricing, docs shell; all build and route |
-| 5 | App Shell and Navigation | not started | |
+| 5 | App Shell and Navigation | done | sidebar with agent switcher + per agent nav, top bar with breadcrumbs and account menu, agents overview + create flow, all 8 tab routes (stubs for later sections), settings in shell |
 | 6 | Agent Core (runtime and verbs) | not started | |
 | 7 | Knowledge and Retrieval (RAG) | not started | |
 | 8 | Tools: OpenAPI Import and the Gateway | not started | |
