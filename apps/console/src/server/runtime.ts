@@ -5,7 +5,6 @@ import {
   detectFlow,
   selectProvider,
 } from "@beckon/agent-core"
-import { getPendingRegistry } from "./pending"
 import {
   actionEvents as actionEventsTable,
   agents,
@@ -30,6 +29,7 @@ import {
   isOriginAllowed,
 } from "@beckon/shared"
 import { and, asc, eq, isNull } from "drizzle-orm"
+import { getPendingRegistry } from "./pending"
 import { makeRetriever } from "./rag/retriever"
 
 /** Validate an embed token and origin. Returns the scoped agent id, or an error. */

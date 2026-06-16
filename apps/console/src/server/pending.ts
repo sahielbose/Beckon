@@ -1,7 +1,7 @@
 import {
-  globalPendingRegistry,
   type PendingRegistry,
   type PendingResolution,
+  globalPendingRegistry,
 } from "@beckon/agent-core"
 import { Redis } from "ioredis"
 
