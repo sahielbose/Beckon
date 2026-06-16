@@ -146,27 +146,44 @@ export async function callOperation(
     headers["x-beckon-signature"] = createHmac("sha256", secret).update(signed).digest("hex")
   }
 
-  // 7. Execute with a timeout.
+  // 7. Execute with a timeout. Idempotent reads are retried with backoff. Writes
+  //    are never retried, so a side effect is never duplicated.
+  const idempotent = operation.method === "GET" || operation.method === "HEAD"
+  const maxAttempts = idempotent ? 3 : 1
   let status: number | undefined
   let responseBody: unknown
   let error: string | undefined
-  try {
-    const response = await fetchImpl(url, {
-      method: operation.method,
-      headers,
-      body: bodyText,
-      signal: AbortSignal.timeout(15_000),
-    })
-    status = response.status
-    const text = await response.text()
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    error = undefined
     try {
-      responseBody = text ? JSON.parse(text) : null
-    } catch {
-      responseBody = text
+      const response = await fetchImpl(url, {
+        method: operation.method,
+        headers,
+        body: bodyText,
+        signal: AbortSignal.timeout(15_000),
+      })
+      status = response.status
+      const text = await response.text()
+      try {
+        responseBody = text ? JSON.parse(text) : null
+      } catch {
+        responseBody = text
+      }
+      if (!response.ok) {
+        error = `The host returned status ${response.status}.`
+        if (idempotent && response.status >= 500 && attempt < maxAttempts - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 2 ** attempt * 200))
+          continue
+        }
+      }
+      break
+    } catch (e) {
+      error = e instanceof Error ? e.message : "The request to the host failed."
+      if (attempt < maxAttempts - 1) {
+        await new Promise((resolve) => setTimeout(resolve, 2 ** attempt * 200))
+      }
     }
-    if (!response.ok) error = `The host returned status ${response.status}.`
-  } catch (e) {
-    error = e instanceof Error ? e.message : "The request to the host failed."
   }
 
   const log = finishLog({
