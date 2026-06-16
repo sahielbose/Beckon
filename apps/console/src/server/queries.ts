@@ -6,13 +6,14 @@ import {
   flows,
   gatewayConfigs,
   guardrails,
+  invitations,
   knowledgeSources,
   memberships,
   organizations,
   tools,
   users,
 } from "@beckon/db"
-import { and, asc, desc, eq } from "drizzle-orm"
+import { and, asc, desc, eq, isNull } from "drizzle-orm"
 
 export async function listFlows(agentId: string) {
   return db.select().from(flows).where(eq(flows.agentId, agentId)).orderBy(desc(flows.createdAt))
@@ -90,4 +91,12 @@ export async function listMembers(orgId: string) {
 
 export async function getOrg(orgId: string) {
   return (await db.select().from(organizations).where(eq(organizations.id, orgId)).limit(1))[0]
+}
+
+export async function listPendingInvitations(orgId: string) {
+  return db
+    .select()
+    .from(invitations)
+    .where(and(eq(invitations.orgId, orgId), isNull(invitations.acceptedAt)))
+    .orderBy(desc(invitations.createdAt))
 }

@@ -1,13 +1,28 @@
+import { InviteForm } from "@/components/invite-form"
+import { revokeInvitationAction } from "@/server/actions/team"
 import { requireOrgId } from "@/server/current"
-import { getOrg, listMembers } from "@/server/queries"
-import { Badge, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@beckon/ui"
+import { getOrg, listMembers, listPendingInvitations } from "@/server/queries"
+import {
+  Badge,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@beckon/ui"
 
 export default async function TeamSettingsPage() {
   const orgId = await requireOrgId()
-  const [members, org] = await Promise.all([listMembers(orgId), getOrg(orgId)])
+  const [members, org, invites] = await Promise.all([
+    listMembers(orgId),
+    getOrg(orgId),
+    listPendingInvitations(orgId),
+  ])
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-8">
       <div className="space-y-1">
         <h1 className="text-xl font-semibold">Team</h1>
         <p className="text-sm text-ink-muted">People in {org?.name ?? "your workspace"}.</p>
@@ -34,12 +49,39 @@ export default async function TeamSettingsPage() {
         </TableBody>
       </Table>
 
-      {/* STUB: inviting teammates by email needs a transactional email provider,
-          wired during activation (Section 17). The members table above is live. */}
-      <p className="text-sm text-ink-faint">
-        Inviting teammates by email is not available yet. It is enabled once an email provider is
-        connected.
-      </p>
+      <div className="space-y-4 border-t border-line pt-8">
+        <div className="space-y-1">
+          <h2 className="text-base font-semibold">Invite a teammate</h2>
+          <p className="text-sm text-ink-muted">
+            Send an email invite. They join your workspace when they accept.
+          </p>
+        </div>
+        <InviteForm />
+      </div>
+
+      {invites.length > 0 ? (
+        <div className="space-y-3">
+          <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
+            Pending invites
+          </h3>
+          <ul className="divide-y divide-line rounded-lg border border-line">
+            {invites.map((invite) => (
+              <li key={invite.id} className="flex items-center justify-between gap-4 px-4 py-3">
+                <div className="space-y-0.5">
+                  <span className="text-sm text-ink">{invite.email}</span>
+                  <p className="text-xs text-ink-faint">Invited as {invite.role}</p>
+                </div>
+                <form action={revokeInvitationAction}>
+                  <input type="hidden" name="invitationId" value={invite.id} />
+                  <Button type="submit" variant="ghost" size="sm">
+                    Revoke
+                  </Button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </section>
   )
 }
