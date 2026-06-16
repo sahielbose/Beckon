@@ -132,3 +132,33 @@ decided, and why.
   `text-embedding-3-small` behind the same interface, with the provider swappable.
   No keys are wired until Section 17. Until then the providers run in a clearly
   marked stub mode (deterministic mock responses) so the app and evals run offline.
+
+## 2026-06-16 (interface and gaps upgrade)
+
+- **D-022 Durable ingestion with graceful fallbacks.** Uploaded files are stored in
+  S3 compatible storage and ingestion reads from there, so re-index needs no
+  re-upload. Ingestion is enqueued to BullMQ when REDIS_URL is set, otherwise it runs
+  inline; when storage is not configured the file is ingested once from the buffer in
+  hand. This keeps local and offline runs working with no Redis and no S3, matching the
+  stub ethos, while production gets the durable, async path.
+
+- **D-023 Redis backed confirmation registry.** The pause for confirm registry uses
+  Redis (BLPOP/RPUSH) when REDIS_URL is set so the chat stream and the action result
+  callback work across instances and serverless, and falls back to the in memory
+  registry otherwise. The PendingRegistry.settle signature was widened to allow an
+  async implementation. Confirm before write behavior is unchanged.
+
+- **D-024 Email, reset, invites.** Resend mailer logs and no ops without a key, sends
+  with one. Password reset reuses verification_tokens with a namespaced identifier
+  (pwreset:email) and a hashed token. Team invites use a new invitations table with a
+  hashed single use token and an explicit accept step (consistent with the confirm
+  before change rule).
+
+- **D-025 Local activation secrets generated.** AUTH_SECRET and BECKON_ENCRYPTION_KEY
+  were generated with openssl into a local .env that is gitignored and never committed.
+  Real model, embedding, and email keys are still required to leave stub mode.
+
+- **D-021 (still open) CI workflow scope.** The CI workflow lives at
+  docs/ci-workflow.yml and a copy at .github/workflows/ci.yml. Pushing the workflow
+  file is rejected unless the git token has the GitHub workflow scope, so it must be
+  added through the GitHub UI (or pushed from a session whose token has that scope).

@@ -32,3 +32,27 @@ Legend: not started, in progress, done.
 - [x] Database: Drizzle schema for every table, migrations, typed client, seed scaffold
 - [x] Shared and evals: Zod schemas for tools, actions, chat events; Vitest eval runner; pnpm eval
 - [x] Done when: pnpm install, typecheck, lint, test, eval all green; migrate + seed verified on live pgvector; README explains setup
+
+## Interface and gaps upgrade (2026-06-16)
+
+A targeted pass on top of the finished product. No rebuild.
+
+- **A. Interface upgrade (done).** One shared motion language across the product.
+  Design system: textures (bg-grid, bg-spotlight), shimmer skeletons, tactile press,
+  animated focus, sliding tab indicator, hover-lift cards, Stagger and Spinner.
+  Marketing: scroll-aware nav, textured hero, quiet first-view reveals, hover states.
+  Console: refined sidebar with active indicator, mobile drawer, loading skeletons,
+  polished lists and tables. Live hero: a looping command surface that types, streams,
+  confirms, and adds an Acme row to a mini CRM panel, with a static reduced-motion state.
+  Palette unchanged, reduced motion respected, no layout shift.
+- **B. Durable knowledge ingestion (done).** S3 compatible storage client; uploads are
+  persisted and re-index needs no re-upload. BullMQ queue + worker driven by REDIS_URL,
+  with an inline fallback when there is no Redis. Verified end to end on live MinIO + Redis.
+- **C. Production confirmation registry (done).** Redis backed (BLPOP/RPUSH) when
+  REDIS_URL is set, in memory otherwise. Confirm before write unchanged.
+- **D. Email, password reset, team invites (done).** Resend mailer that logs offline
+  and sends with a key. Password reset request and reset pages. Team invites by email
+  with an accept flow. All degrade quietly with no key.
+- **E. CI.** Workflow file ready; activation depends on a token with workflow scope.
+- **F. Activation (stop point).** AUTH_SECRET and BECKON_ENCRYPTION_KEY generated into a
+  local .env (not committed). Waiting on real model, embedding, and email keys.
