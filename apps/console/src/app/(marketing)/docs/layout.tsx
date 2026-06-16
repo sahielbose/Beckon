@@ -14,7 +14,7 @@ export default function DocsLayout({ children }: { children: ReactNode }) {
   return (
     <main className="mx-auto max-w-content px-6 py-12">
       <div className="grid gap-10 md:grid-cols-[200px_1fr]">
-        <nav className="space-y-1 text-sm">
+        <nav className="space-y-1 text-sm md:sticky md:top-24 md:self-start">
           <p className="px-2 pb-2 font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
             Docs
           </p>

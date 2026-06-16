@@ -1,4 +1,4 @@
-import { Reveal } from "@beckon/ui"
+import { Card, Reveal, Stagger, StaggerItem } from "@beckon/ui"
 import { BookOpen, Compass, Zap } from "lucide-react"
 import Link from "next/link"
 
@@ -29,20 +29,26 @@ const SCENARIOS = [
 export default function UseCasesPage() {
   return (
     <main>
-      <section className="mx-auto max-w-content px-6 py-20">
-        <Reveal className="space-y-4">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">Use cases</p>
-          <h1 className="text-4xl font-semibold sm:text-5xl">Three ways people use Beckon.</h1>
-          <p className="max-w-xl text-lg text-ink-muted">
-            People type what they want and Beckon does it: finding their way around, making changes,
-            and getting answers from your content.
-          </p>
-        </Reveal>
+      <section className="relative overflow-hidden border-b border-line bg-spotlight">
+        <div className="relative mx-auto max-w-content px-6 py-20">
+          <Reveal className="space-y-4">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">Use cases</p>
+            <h1 className="text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+              Three ways people use Beckon.
+            </h1>
+            <p className="max-w-xl text-lg leading-relaxed text-ink-muted">
+              People type what they want and Beckon does it: finding their way around, making
+              changes, and getting answers from your content.
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+      <section className="mx-auto max-w-content px-6 py-20">
+        <Stagger className="grid gap-6 md:grid-cols-3" delay={0.05}>
           {SCENARIOS.map((scenario) => (
-            <Reveal key={scenario.title}>
-              <div className="flex h-full flex-col space-y-3 rounded-lg border border-line bg-bg p-6 shadow-rest">
+            <StaggerItem key={scenario.title} className="h-full">
+              <Card interactive className="flex h-full flex-col space-y-3 p-6">
                 <scenario.icon className="h-5 w-5 text-ink" aria-hidden="true" />
                 <h2 className="text-base font-semibold text-ink">{scenario.title}</h2>
                 <p className="text-sm text-ink-muted">{scenario.body}</p>
@@ -50,19 +56,19 @@ export default function UseCasesPage() {
                   {scenario.example}
                 </code>
                 {scenario.note ? <p className="text-xs text-ink-faint">{scenario.note}</p> : null}
-              </div>
-            </Reveal>
+              </Card>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
 
-        <Reveal className="mt-12 space-y-5">
+        <Reveal className="mt-16 flex flex-col items-start gap-5 border-t border-line pt-12">
           <p className="max-w-xl text-ink-muted">
             One agent handles all three. The same Beckon that navigates your app also takes actions
             and answers from your docs, so people never switch tools to get what they need.
           </p>
           <Link
             href="/signup"
-            className="inline-flex rounded-md bg-ink px-4 py-2.5 text-sm font-medium text-bg transition-colors duration-micro ease-standard hover:opacity-90"
+            className="inline-flex rounded-md bg-ink px-4 py-2.5 text-sm font-medium text-bg transition duration-micro ease-standard hover:opacity-90 active:scale-[0.98]"
           >
             Start free
           </Link>

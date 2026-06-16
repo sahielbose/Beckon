@@ -1,4 +1,4 @@
-import { Badge, Button, Reveal } from "@beckon/ui"
+import { Badge, Button, Card, Reveal, Stagger, StaggerItem } from "@beckon/ui"
 import { Check } from "lucide-react"
 import Link from "next/link"
 
@@ -32,21 +32,25 @@ function Checklist({ items }: { items: string[] }) {
 export default function PricingPage() {
   return (
     <main>
-      <section className="mx-auto max-w-content px-6 py-20">
-        <Reveal className="max-w-2xl space-y-4">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">Pricing</p>
-          <h1 className="text-4xl font-semibold sm:text-5xl">
-            Self host free. Hosted when you want it.
-          </h1>
-          <p className="text-lg text-ink-muted">
-            Run the whole thing yourself at no cost, or wait for the hosted option and let us manage
-            the infrastructure. No hidden tiers, no surprises.
-          </p>
-        </Reveal>
+      <section className="relative overflow-hidden border-b border-line bg-spotlight">
+        <div className="relative mx-auto max-w-content px-6 py-20">
+          <Reveal className="max-w-2xl space-y-4">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">Pricing</p>
+            <h1 className="text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+              Self host free. Hosted when you want it.
+            </h1>
+            <p className="text-lg leading-relaxed text-ink-muted">
+              Run the whole thing yourself at no cost, or wait for the hosted option and let us
+              manage the infrastructure. No hidden tiers, no surprises.
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          <Reveal>
-            <div className="flex h-full flex-col rounded-lg border border-line bg-bg p-8 shadow-rest">
+      <section className="mx-auto max-w-content px-6 py-20">
+        <Stagger className="grid gap-6 md:grid-cols-2" delay={0.05} stagger={0.1}>
+          <StaggerItem className="h-full">
+            <Card interactive className="flex h-full flex-col p-8">
               <h2 className="text-xl font-semibold text-ink">Self host</h2>
               <p className="mt-4 text-3xl font-semibold text-ink">Free</p>
               <p className="mt-4 text-sm text-ink-muted">
@@ -61,11 +65,11 @@ export default function PricingPage() {
                   <Link href="/docs">Read the docs</Link>
                 </Button>
               </div>
-            </div>
-          </Reveal>
+            </Card>
+          </StaggerItem>
 
-          <Reveal delay={0.1}>
-            <div className="flex h-full flex-col rounded-lg border border-line bg-bg p-8 shadow-rest">
+          <StaggerItem className="h-full">
+            <Card interactive className="flex h-full flex-col p-8">
               <div className="flex items-center gap-3">
                 <h2 className="text-xl font-semibold text-ink">Hosted</h2>
                 <Badge variant="muted">Planned</Badge>
@@ -86,9 +90,9 @@ export default function PricingPage() {
                   you know when hosted opens.
                 </p>
               </div>
-            </div>
-          </Reveal>
-        </div>
+            </Card>
+          </StaggerItem>
+        </Stagger>
 
         <Reveal>
           <p className="mt-12 max-w-2xl text-sm text-ink-muted">
