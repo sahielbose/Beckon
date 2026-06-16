@@ -19,7 +19,17 @@ const nextConfig = {
     "@beckon/client",
   ],
   // These run only on the server; keep them out of the client bundle.
-  serverExternalPackages: ["postgres", "@anthropic-ai/sdk", "openai", "unpdf", "mammoth"],
+  serverExternalPackages: [
+    "postgres",
+    "@anthropic-ai/sdk",
+    "openai",
+    "unpdf",
+    "mammoth",
+    "ioredis",
+    "bullmq",
+    "@aws-sdk/client-s3",
+    "resend",
+  ],
   experimental: {
     serverActions: { bodySizeLimit: "10mb" },
   },

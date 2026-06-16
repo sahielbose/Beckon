@@ -1,5 +1,5 @@
 import { json, preflight } from "@/server/cors"
-import { globalPendingRegistry } from "@/server/runtime"
+import { getPendingRegistry } from "@/server/runtime"
 import { actionResultInput } from "@beckon/shared"
 
 export const runtime = "nodejs"
@@ -16,18 +16,19 @@ export async function POST(req: Request) {
 
   const input = parsed.data
   const key = `${input.sessionId}:${input.requestId}`
+  const registry = getPendingRegistry()
 
   if (input.type === "confirmation") {
-    globalPendingRegistry.settle(key, { kind: "confirmation", confirmed: input.confirmed })
+    await registry.settle(key, { kind: "confirmation", confirmed: input.confirmed })
   } else if (input.type === "action_result") {
-    globalPendingRegistry.settle(key, {
+    await registry.settle(key, {
       kind: "result",
       status: input.status === "ok" ? "ok" : "error",
       result: input.result,
       error: input.error,
     })
   } else {
-    globalPendingRegistry.settle(key, {
+    await registry.settle(key, {
       kind: "result",
       status: input.status === "success" ? "ok" : "error",
       result: input.result,

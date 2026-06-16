@@ -5,7 +5,7 @@ import {
   detectFlow,
   selectProvider,
 } from "@beckon/agent-core"
-import { globalPendingRegistry } from "@beckon/agent-core"
+import { getPendingRegistry } from "./pending"
 import {
   actionEvents as actionEventsTable,
   agents,
@@ -241,7 +241,7 @@ export async function buildRunContext(input: BuildContextInput): Promise<RunCont
     provider,
     // Every server tool call goes through the gateway.
     serverExecutor: new GatewayServerExecutor(gatewayConfig),
-    pending: globalPendingRegistry,
+    pending: getPendingRegistry(),
     retrieve: makeRetriever(input.agentId),
     flowAllowedTools:
       activeFlow && activeFlow.allowedTools.length > 0 ? activeFlow.allowedTools : null,
@@ -276,5 +276,5 @@ export function makeTurnLogger(conversationId: string): TurnLogger {
   }
 }
 
-export { globalPendingRegistry }
+export { getPendingRegistry }
 export { conversations, messagesTable }
