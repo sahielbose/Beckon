@@ -19,7 +19,7 @@ Legend: not started, in progress, done.
 | 11 | Flows and Guardrails | done | flow engine (trigger detection + tool narrowing + step guidance) wired into runtime, flow builder UI, guardrails panel (block tools + confirm on write); flow-adherence + guardrails evals green. Enforcement in runtime and gateway |
 | 12 | Observability and Analytics | done | conversation list + transcript replay (messages, tool calls, actions, confirmations), analytics summary (top intents, tool success rates) with minimal monochrome charts; logging pipeline persists every turn with secrets redacted |
 | 13 | Demo Sandbox App | done | CRM (clients, deals, tasks, P&L) with in memory store, its API + OpenAPI spec, embedded Beckon widget with client actions + onIdentify, data-beckon selectors, setup script + happy path readme |
-| 14 | Evals and Quality Gate | not started | |
+| 14 | Evals and Quality Gate | done | 27 golden cases across all 9 categories incl. injection defense (retrieved content, impersonation, tool results all treated as data); CI gate definition at docs/ci-workflow.yml (copy to .github/workflows to activate, see D-021), verified locally |
 | 15 | Hardening | not started | |
 | 16 | Deployment and Self Hosting | not started | |
 | 17 | Activation Checklist | waits on human | the only stop point |
