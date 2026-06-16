@@ -26,6 +26,7 @@ import {
   isOriginAllowed,
 } from "@beckon/shared"
 import { and, asc, eq, isNull } from "drizzle-orm"
+import { makeRetriever } from "./rag/retriever"
 
 /** Validate an embed token and origin. Returns the scoped agent id, or an error. */
 export async function validateEmbed(
@@ -198,6 +199,7 @@ export async function buildRunContext(input: BuildContextInput): Promise<RunCont
     provider,
     serverExecutor: new MockServerExecutor(),
     pending: globalPendingRegistry,
+    retrieve: makeRetriever(input.agentId),
   }
 }
 

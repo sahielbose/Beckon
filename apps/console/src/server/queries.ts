@@ -1,5 +1,22 @@
-import { agents, allowedOrigins, apiKeys, db, memberships, organizations, users } from "@beckon/db"
+import {
+  agents,
+  allowedOrigins,
+  apiKeys,
+  db,
+  knowledgeSources,
+  memberships,
+  organizations,
+  users,
+} from "@beckon/db"
 import { and, desc, eq } from "drizzle-orm"
+
+export async function listKnowledgeSources(agentId: string) {
+  return db
+    .select()
+    .from(knowledgeSources)
+    .where(eq(knowledgeSources.agentId, agentId))
+    .orderBy(desc(knowledgeSources.createdAt))
+}
 
 export async function listAgents(orgId: string) {
   return db.select().from(agents).where(eq(agents.orgId, orgId)).orderBy(desc(agents.createdAt))
