@@ -44,6 +44,9 @@ importers:
       '@beckon/gateway':
         specifier: workspace:*
         version: link:../../packages/gateway
+      '@beckon/react':
+        specifier: workspace:*
+        version: link:../../packages/react
       '@beckon/shared':
         specifier: workspace:*
         version: link:../../packages/shared

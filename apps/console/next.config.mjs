@@ -7,6 +7,8 @@ const nextConfig = {
     "@beckon/db",
     "@beckon/agent-core",
     "@beckon/gateway",
+    "@beckon/react",
+    "@beckon/client",
   ],
   // These run only on the server; keep them out of the client bundle.
   serverExternalPackages: ["postgres", "@anthropic-ai/sdk", "openai", "unpdf", "mammoth"],
