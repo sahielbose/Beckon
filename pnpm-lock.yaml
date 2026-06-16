@@ -41,6 +41,9 @@ importers:
       '@beckon/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@beckon/embed':
+        specifier: workspace:*
+        version: link:../../packages/embed
       '@beckon/gateway':
         specifier: workspace:*
         version: link:../../packages/gateway

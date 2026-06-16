@@ -49,11 +49,33 @@ pnpm dev                      # console and demo dev servers
 
 If port 5432 is already in use on your machine, point `DATABASE_URL` at a free port.
 
-## Self host (Docker Compose)
+## Try the demo
 
-`docker-compose.yml` runs Postgres with pgvector, Redis, and MinIO. The console and
-runtime run on Node. Full self host packaging and a Vercel path are completed in
-Section 16.
+`apps/demo` is a small CRM with Beckon embedded. Run it, wire an agent, and drive it
+by chat. See `apps/demo/README.md`.
+
+## Deploy
+
+Self host with Docker Compose, or deploy the console to Vercel. The embed bundle is
+served from the same origin at `/embed.js`.
+
+```bash
+# Full self host: app, Postgres with pgvector, Redis, and MinIO.
+AUTH_SECRET=$(openssl rand -base64 32) docker compose --profile app up --build
+```
+
+See `DEPLOY.md` for both paths and the environment variables. Security posture is in
+`SECURITY.md`.
+
+## Architecture
+
+The console (Next.js) renders the marketing site, the operator dashboard, and the
+runtime API. Real logic lives in `packages/agent-core` (retrieve, plan, call tool, run
+flow, guardrail check); route handlers and the SDK are thin adapters over it. Server
+tool calls go through `packages/gateway`, the trust layer that validates, rate limits,
+signs, and logs every call. Retrieval uses Postgres with pgvector. The SDK
+(`@beckon/client`, `@beckon/react`, `embed.js`) drops the widget into any web app, and
+every side effect is gated behind a confirm step.
 
 ## Commands
 
