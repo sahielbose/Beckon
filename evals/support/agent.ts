@@ -53,11 +53,13 @@ export async function runTurnCollect(opts: {
   confirm?: boolean
   retrieve?: RunContext["retrieve"]
   flowAllowedTools?: string[] | null
+  /** What a server tool returns. Use to inject untrusted content into a result. */
+  executorResult?: unknown
 }): Promise<TurnResult> {
   const executed: string[] = []
   const executor = new MockServerExecutor((tool) => {
     executed.push(tool.name)
-    return { ok: true }
+    return opts.executorResult ?? { ok: true }
   })
 
   const ctx: RunContext = {
