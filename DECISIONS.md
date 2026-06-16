@@ -4,6 +4,15 @@ Engineering decisions made while building Beckon that are not spelled out in the
 context document or the implementation guide. Newest at the top. Each entry: what was
 decided, and why.
 
+## 2026-06-15 (Section 14)
+
+- **D-021 CI workflow shipped at `docs/ci-workflow.yml`.** The build token has
+  `repo` scope but not GitHub `workflow` scope, so it cannot push files under
+  `.github/workflows`. The complete CI definition (typecheck, lint, test, eval,
+  build) is committed at `docs/ci-workflow.yml`. To activate, copy it to
+  `.github/workflows/ci.yml` from a session with `workflow` scope or via the GitHub
+  UI. The gate itself is real and verified to pass locally.
+
 ## 2026-06-15 (Section 9)
 
 - **D-019 Install snippet carries the public embed token.** The widget authenticates

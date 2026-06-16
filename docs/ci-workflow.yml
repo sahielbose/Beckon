@@ -1,0 +1,48 @@
+# Beckon CI gate. To activate, copy this file to .github/workflows/ci.yml.
+# It ships here because the build token lacks GitHub "workflow" scope to push under
+# .github/workflows directly (see DECISIONS D-021).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Unit tests
+        run: pnpm test
+
+      # A failing eval is a failing build.
+      - name: Evals
+        run: pnpm eval
+
+      - name: Build
+        run: pnpm build
+        env:
+          AUTH_SECRET: ci-build-secret
+          BECKON_STUB_LLM: "true"
