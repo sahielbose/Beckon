@@ -65,6 +65,46 @@ services:
       echo 'minio bucket ready';
       "
 
+  # The app and migrations. Run with the "app" profile for a full self host:
+  #   AUTH_SECRET=$(openssl rand -base64 32) docker compose --profile app up --build
+  migrate:
+    profiles: ["app"]
+    build:
+      context: .
+      target: build
+    environment:
+      DATABASE_URL: postgres://beckon:beckon@postgres:5432/beckon
+    command: ["pnpm", "db:migrate"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  app:
+    profiles: ["app"]
+    build:
+      context: .
+      target: runner
+    environment:
+      DATABASE_URL: postgres://beckon:beckon@postgres:5432/beckon
+      REDIS_URL: redis://redis:6379
+      AUTH_SECRET: ${AUTH_SECRET:-change-me-in-production}
+      AUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      BECKON_STUB_LLM: "true"
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY_ID: minio
+      S3_SECRET_ACCESS_KEY: minio12345
+      S3_BUCKET: beckon
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
 volumes:
   beckon-postgres:
   beckon-redis:
