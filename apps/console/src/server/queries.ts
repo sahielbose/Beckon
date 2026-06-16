@@ -1,5 +1,19 @@
-import { allowedOrigins, apiKeys, db, memberships, organizations, users } from "@beckon/db"
+import { agents, allowedOrigins, apiKeys, db, memberships, organizations, users } from "@beckon/db"
 import { and, desc, eq } from "drizzle-orm"
+
+export async function listAgents(orgId: string) {
+  return db.select().from(agents).where(eq(agents.orgId, orgId)).orderBy(desc(agents.createdAt))
+}
+
+export async function getAgentForOrg(orgId: string, agentId: string) {
+  return (
+    await db
+      .select()
+      .from(agents)
+      .where(and(eq(agents.orgId, orgId), eq(agents.id, agentId)))
+      .limit(1)
+  )[0]
+}
 
 export async function listSecretKeys(orgId: string) {
   return db
