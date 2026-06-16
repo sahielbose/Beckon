@@ -1,6 +1,14 @@
+import { dirname, join } from "node:path"
+import { fileURLToPath } from "node:url"
+
+const monorepoRoot = join(dirname(fileURLToPath(import.meta.url)), "../..")
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Standalone output for the Docker self host image, traced from the monorepo root.
+  output: "standalone",
+  outputFileTracingRoot: monorepoRoot,
   transpilePackages: [
     "@beckon/ui",
     "@beckon/shared",

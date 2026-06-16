@@ -19,6 +19,7 @@
       "coverage",
       "**/*.gen.ts",
       "**/drizzle/**",
+      "**/public/embed.js",
       "pnpm-lock.yaml"
     ]
   },

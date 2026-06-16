@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev -p 3000",
-    "build": "next build",
+    "build": "node scripts/copy-embed.mjs && next build",
     "start": "next start -p 3000",
     "typecheck": "tsc --noEmit"
   },
@@ -13,6 +13,7 @@
     "@auth/drizzle-adapter": "^1.7.4",
     "@beckon/agent-core": "workspace:*",
     "@beckon/db": "workspace:*",
+    "@beckon/embed": "workspace:*",
     "@beckon/gateway": "workspace:*",
     "@beckon/react": "workspace:*",
     "@beckon/shared": "workspace:*",
