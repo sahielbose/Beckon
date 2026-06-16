@@ -22,7 +22,9 @@ export const DialogOverlay = forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-ink/20 backdrop-blur-[1px] data-[state=open]:animate-fade-in",
+      "fixed inset-0 z-50 bg-ink/20 backdrop-blur-[1px]",
+      // Standard easing and duration both ways, fully disabled under reduced motion.
+      "data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out motion-reduce:animate-none",
       className,
     )}
     {...props}
@@ -39,7 +41,9 @@ export const DialogContent = forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-lg border border-line bg-bg p-6 shadow-hover data-[state=open]:animate-enter-up",
+        "fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-lg border border-line bg-bg p-6 shadow-hover",
+        // Entrance lift on open, quiet fade on close, off under reduced motion.
+        "data-[state=open]:animate-enter-up data-[state=closed]:animate-fade-out motion-reduce:animate-none",
         className,
       )}
       {...props}

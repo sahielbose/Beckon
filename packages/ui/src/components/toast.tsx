@@ -5,8 +5,12 @@ import { Toaster as SonnerToaster } from "sonner"
 type ToasterProps = React.ComponentProps<typeof SonnerToaster>
 
 export function Toaster(props: ToasterProps) {
+  // The palette is light only. Sonner handles its own quiet enter and exit and
+  // honors prefers-reduced-motion natively, so we keep styling restrained and do
+  // not override its motion. Callers can still pass props through.
   return (
     <SonnerToaster
+      theme="light"
       position="top-right"
       toastOptions={{
         classNames: {

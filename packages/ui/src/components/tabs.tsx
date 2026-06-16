@@ -25,7 +25,10 @@ export const TabsTrigger = forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "relative px-3 py-2 text-sm font-medium text-ink-muted transition-colors duration-micro ease-standard hover:text-ink data-[state=active]:text-ink data-[state=active]:after:absolute data-[state=active]:after:inset-x-0 data-[state=active]:after:-bottom-px data-[state=active]:after:h-0.5 data-[state=active]:after:bg-ink focus-visible:outline-none",
+      "relative px-3 py-2 text-sm font-medium text-ink-muted transition-colors duration-micro ease-standard hover:text-ink data-[state=active]:text-ink focus-visible:outline-none",
+      // Underline indicator on every trigger, scaled to 0 when inactive and
+      // grown to full when active so it slides in smoothly rather than popping.
+      "after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:origin-center after:scale-x-0 after:bg-ink after:transition-transform after:duration-standard after:ease-standard data-[state=active]:after:scale-x-100",
       className,
     )}
     {...props}

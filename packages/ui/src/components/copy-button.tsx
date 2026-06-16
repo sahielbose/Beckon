@@ -29,7 +29,21 @@ export function CopyButton({
         className,
       )}
     >
-      {copied ? <Check className="text-success" /> : <Copy />}
+      {/* Both icons share one grid cell so the swap crossfades with no shift. */}
+      <span className="grid place-items-center [&>*]:col-start-1 [&>*]:row-start-1">
+        <Copy
+          className={cn(
+            "transition-opacity duration-standard ease-standard",
+            copied ? "opacity-0" : "opacity-100",
+          )}
+        />
+        <Check
+          className={cn(
+            "text-success transition-opacity duration-standard ease-standard",
+            copied ? "opacity-100" : "opacity-0",
+          )}
+        />
+      </span>
     </button>
   )
 }

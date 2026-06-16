@@ -21,7 +21,8 @@ const SheetOverlay = forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-ink/20 backdrop-blur-[1px] data-[state=open]:animate-fade-in",
+      "fixed inset-0 z-50 bg-ink/20 backdrop-blur-[1px]",
+      "data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out motion-reduce:animate-none",
       className,
     )}
     {...props}
@@ -30,8 +31,9 @@ const SheetOverlay = forwardRef<
 SheetOverlay.displayName = "SheetOverlay"
 
 const sideClasses = {
-  right: "right-0 border-l data-[state=open]:animate-in data-[state=open]:slide-in-from-right",
-  left: "left-0 border-r data-[state=open]:animate-in data-[state=open]:slide-in-from-left",
+  right:
+    "right-0 border-l data-[state=open]:animate-slide-in-right data-[state=closed]:animate-slide-out-right",
+  left: "left-0 border-r data-[state=open]:animate-slide-in-left data-[state=closed]:animate-slide-out-left",
 } as const
 
 export interface SheetContentProps
@@ -48,7 +50,7 @@ export const SheetContent = forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed inset-y-0 z-50 flex w-full max-w-[420px] flex-col border-line bg-bg shadow-hover",
+        "fixed inset-y-0 z-50 flex w-full max-w-[420px] flex-col border-line bg-bg shadow-hover motion-reduce:animate-none",
         sideClasses[side],
         className,
       )}
