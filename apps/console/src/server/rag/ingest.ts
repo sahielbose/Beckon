@@ -1,3 +1,4 @@
+import { getObject } from "@/server/storage/s3"
 import { chunkText, selectEmbedder } from "@beckon/agent-core"
 import { chunks as chunksTable, db, knowledgeSources } from "@beckon/db"
 import { eq } from "drizzle-orm"
@@ -6,10 +7,16 @@ import { extractFromFile, extractFromUrl } from "./extract"
 /**
  * Ingest one knowledge source: extract text, chunk it, embed each chunk, and store
  * the chunks for retrieval. Status moves pending to processing to ready, or error
- * with a clear message. Runs inline (awaited); a BullMQ worker is the path for
- * scale (see DECISIONS).
+ * with a clear message.
+ *
+ * File sources are read from object storage by their stored key, so re-indexing
+ * never requires re-uploading. The optional buffer is only used on the offline
+ * path where storage is not configured and the file is ingested once in hand.
  */
-export async function ingestSource(sourceId: string, fileBuffer?: Buffer): Promise<void> {
+export async function ingestSource(
+  sourceId: string,
+  opts: { buffer?: Buffer } = {},
+): Promise<void> {
   const source = (
     await db.select().from(knowledgeSources).where(eq(knowledgeSources.id, sourceId)).limit(1)
   )[0]
@@ -24,10 +31,13 @@ export async function ingestSource(sourceId: string, fileBuffer?: Buffer): Promi
     let text = ""
     if (source.type === "url") {
       text = await extractFromUrl(source.sourceUri ?? "")
-    } else if (fileBuffer) {
-      text = await extractFromFile(source.name, fileBuffer)
+    } else if (opts.buffer) {
+      text = await extractFromFile(source.name, opts.buffer)
+    } else if (source.storageKey) {
+      const buffer = await getObject(source.storageKey)
+      text = await extractFromFile(source.name, buffer)
     } else {
-      throw new Error("This file needs to be uploaded again to re-index.")
+      throw new Error("The original file is no longer available. Add it again.")
     }
 
     text = text.trim()
