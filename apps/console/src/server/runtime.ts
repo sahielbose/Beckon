@@ -2,6 +2,7 @@ import {
   type RunContext,
   type RuntimeTool,
   type TurnLogger,
+  detectFlow,
   selectProvider,
 } from "@beckon/agent-core"
 import { globalPendingRegistry } from "@beckon/agent-core"
@@ -13,6 +14,7 @@ import {
   clientActions as clientActionsTable,
   conversations,
   db,
+  flows as flowsTable,
   gatewayConfigs as gatewayConfigsTable,
   guardrails as guardrailsTable,
   messages as messagesTable,
@@ -201,21 +203,34 @@ export async function buildRunContext(input: BuildContextInput): Promise<RunCont
   const agent = (await db.select().from(agents).where(eq(agents.id, input.agentId)).limit(1))[0]
   if (!agent) return null
 
-  const [guardrails, tools, history, gatewayConfig] = await Promise.all([
+  const [guardrails, tools, history, gatewayConfig, agentFlows] = await Promise.all([
     loadGuardrails(input.agentId),
     loadRuntimeTools(input.agentId, input.clientTools, input.clientActions),
     loadHistory(input.conversationId),
     loadGatewayConfig(input.agentId),
+    db
+      .select()
+      .from(flowsTable)
+      .where(and(eq(flowsTable.agentId, input.agentId), eq(flowsTable.enabled, true))),
   ])
 
   const provider = await selectProvider(agent.model)
+
+  // Steer through an active flow: narrow the tools and inject step guidance.
+  const activeFlow = detectFlow(
+    input.userMessage,
+    agentFlows.map((f) => ({ name: f.name, trigger: f.trigger, steps: f.steps })),
+  )
+  const systemPrompt = activeFlow
+    ? `${agent.systemPrompt}\n\nYou are in the "${activeFlow.name}" flow. Follow these steps in order and only use the tools they allow:\n${activeFlow.guidance}`
+    : agent.systemPrompt
 
   return {
     conversationId: input.conversationId,
     agentId: input.agentId,
     externalUserId: input.externalUserId ?? null,
     model: agent.model,
-    systemPrompt: agent.systemPrompt,
+    systemPrompt,
     persona: agent.persona,
     history,
     userMessage: input.userMessage,
@@ -226,6 +241,8 @@ export async function buildRunContext(input: BuildContextInput): Promise<RunCont
     serverExecutor: new GatewayServerExecutor(gatewayConfig),
     pending: globalPendingRegistry,
     retrieve: makeRetriever(input.agentId),
+    flowAllowedTools:
+      activeFlow && activeFlow.allowedTools.length > 0 ? activeFlow.allowedTools : null,
   }
 }
 
