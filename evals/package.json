@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "@beckon/agent-core": "workspace:*",
+    "@beckon/gateway": "workspace:*",
     "@beckon/shared": "workspace:*"
   },
   "devDependencies": {
+    "@types/node": "^20.17.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }

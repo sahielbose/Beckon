@@ -6,10 +6,12 @@ import type { EvalCase, EvalOutcome } from "./types"
 const here = dirname(fileURLToPath(import.meta.url))
 const casesDir = join(here, "cases")
 
+type DirEntry = { name: string; isDirectory(): boolean }
+
 async function findCaseFiles(dir: string): Promise<string[]> {
-  let entries: Awaited<ReturnType<typeof readdir>>
+  let entries: DirEntry[]
   try {
-    entries = await readdir(dir, { withFileTypes: true })
+    entries = (await readdir(dir, { withFileTypes: true })) as DirEntry[]
   } catch {
     return []
   }

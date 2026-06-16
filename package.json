@@ -36,6 +36,9 @@
     "vitest": "^2.1.8"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["@biomejs/biome", "esbuild", "sharp"]
+    "onlyBuiltDependencies": ["@biomejs/biome", "esbuild", "sharp"],
+    "overrides": {
+      "@types/node": "^20.17.0"
+    }
   }
 }
