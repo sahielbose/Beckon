@@ -133,7 +133,9 @@ export async function loadRuntimeTools(
       kind: "server",
       sideEffect: t.sideEffect,
       requiresConfirmation: t.requiresConfirmation,
-      routing: { method: t.httpMethod, path: t.pathTemplate, toolSpecId: t.toolSpecId },
+      // The full parsed operation (params, body, schema) the gateway needs to build
+      // and validate the request. Stored on the tool at import time.
+      routing: t.routing ?? undefined,
     })
   }
 

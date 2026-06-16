@@ -87,7 +87,7 @@ export async function callOperation(
   }
 
   // 2. Validate arguments against the operation schema.
-  const validation = validateArgs(operation.parametersSchema, args)
+  const validation = validateArgs(operation.parametersSchema ?? {}, args)
   if (!validation.ok) {
     return {
       ok: false,
@@ -115,7 +115,7 @@ export async function callOperation(
   }
   const body: Record<string, unknown> = {}
 
-  for (const param of operation.params) {
+  for (const param of operation.params ?? []) {
     const value = args[param.name]
     if (value === undefined) continue
     if (param.in === "path")
@@ -123,7 +123,7 @@ export async function callOperation(
     else if (param.in === "query") query.set(param.name, String(value))
     else if (param.in === "header") headers[param.name] = String(value)
   }
-  for (const key of operation.bodyProps) {
+  for (const key of operation.bodyProps ?? []) {
     if (args[key] !== undefined) body[key] = args[key]
   }
   const hasBody = Object.keys(body).length > 0
