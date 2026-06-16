@@ -12,7 +12,7 @@ Legend: not started, in progress, done.
 | 4 | Marketing Site | done | nav with auth aware Open app handoff, footer, home hero (command surface preview), how it works, use cases, pricing, docs shell; all build and route |
 | 5 | App Shell and Navigation | done | sidebar with agent switcher + per agent nav, top bar with breadcrumbs and account menu, agents overview + create flow, all 8 tab routes (stubs for later sections), settings in shell |
 | 6 | Agent Core (runtime and verbs) | done | provider abstraction (stub default + claude/openai), tool registry, orchestration loop with confirmation pause, 3 SSE endpoints; verified end to end over HTTP (origin allowlist, streaming, confirm round trip, persistence); tool-plan + confirmation evals green |
-| 7 | Knowledge and Retrieval (RAG) | not started | |
+| 7 | Knowledge and Retrieval (RAG) | done | embedder (stub + openai), chunker, file/url extraction, inline ingestion, pgvector retriever wired into runtime, Knowledge tab; verified ingest to grounded retrieval on live pgvector; rag-grounding evals green |
 | 8 | Tools: OpenAPI Import and the Gateway | not started | |
 | 9 | SDK and Embeddable Widget | not started | |
 | 10 | Playground and Install | not started | |
