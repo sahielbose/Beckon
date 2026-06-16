@@ -9,7 +9,7 @@ Legend: not started, in progress, done.
 | 1 | Foundation and Infrastructure | done | monorepo, db schema (21 tables), shared contracts, infra, eval harness; migrate + seed verified on live pgvector |
 | 2 | Design System and Shared UI | done | tokens, preset, fonts, 22 primitives, motion, brand, command surface; console scaffold + /preview renders all |
 | 3 | Authentication, Organizations, API Keys | done | auth.js (credentials + optional github), org bootstrap, org scoping, secret keys (reveal once) + embed tokens + origin allowlist, settings; cross tenant isolation tested on live db |
-| 4 | Marketing Site | not started | |
+| 4 | Marketing Site | done | nav with auth aware Open app handoff, footer, home hero (command surface preview), how it works, use cases, pricing, docs shell; all build and route |
 | 5 | App Shell and Navigation | not started | |
 | 6 | Agent Core (runtime and verbs) | not started | |
 | 7 | Knowledge and Retrieval (RAG) | not started | |
