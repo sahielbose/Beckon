@@ -99,8 +99,11 @@ export type PendingResolution =
 export interface PendingRegistry {
   /** Await a resolution for the given key, with a timeout. */
   wait(key: string, timeoutMs?: number): Promise<PendingResolution>
-  /** Settle a pending wait. No op if the key is unknown or already settled. */
-  settle(key: string, resolution: PendingResolution): void
+  /**
+   * Settle a pending wait. No op if the key is unknown or already settled.
+   * May be async (a distributed, Redis backed registry writes over the network).
+   */
+  settle(key: string, resolution: PendingResolution): void | Promise<void>
 }
 
 // ---------------------------------------------------------------------------
