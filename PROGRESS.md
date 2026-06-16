@@ -15,7 +15,7 @@ Legend: not started, in progress, done.
 | 7 | Knowledge and Retrieval (RAG) | done | embedder (stub + openai), chunker, file/url extraction, inline ingestion, pgvector retriever wired into runtime, Knowledge tab; verified ingest to grounded retrieval on live pgvector; rag-grounding evals green |
 | 8 | Tools: OpenAPI Import and the Gateway | done | openapi parser, the Beckon Gateway (validate, rate limit, shared secret signing, encrypted host auth, secret redacted logs), Tools tab, runtime routes server tools through the gateway; openapi-mapping + gateway-guard evals green (incl. secret redaction) |
 | 9 | SDK and Embeddable Widget | done | @beckon/client (session, SSE, action executor, confirm flow), @beckon/react (provider, widget, copilot, command surface, isolated styles), embed.js (Shadow DOM, 264kb); client-actions evals green |
-| 10 | Playground and Install | not started | |
+| 10 | Playground and Install | done | in console playground (real widget via operator session), install page with embed token reveal once, React + script tag snippets, origin allowlist editor. Note: serving embed.js from the app is wired in Section 16 |
 | 11 | Flows and Guardrails | not started | |
 | 12 | Observability and Analytics | not started | |
 | 13 | Demo Sandbox App | not started | |
