@@ -1,17 +1,20 @@
+import { InstallManager, type OriginRow } from "@/components/app/install-manager"
 import { SectionShell } from "@/components/app/section-shell"
-import { EmptyState } from "@beckon/ui"
+import { listOrigins } from "@/server/queries"
 
-// STUB: replaced by the real Install tab (snippets, embed token, origins) in Section 10.
-export default function InstallPage() {
+export default async function InstallPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const origins = await listOrigins(id)
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
+
+  const originRows: OriginRow[] = origins.map((o) => ({ id: o.id, origin: o.origin }))
+
   return (
     <SectionShell
       title="Install"
       description="Copy a snippet, create an embed token, and set your allowed origins."
     >
-      <EmptyState
-        title="Get your install snippet"
-        description="The React snippet, the script tag, and the origin allowlist editor are wired up next."
-      />
+      <InstallManager agentId={id} apiUrl={apiUrl} origins={originRows} />
     </SectionShell>
   )
 }
