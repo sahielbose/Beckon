@@ -20,7 +20,7 @@ Legend: not started, in progress, done.
 | 12 | Observability and Analytics | done | conversation list + transcript replay (messages, tool calls, actions, confirmations), analytics summary (top intents, tool success rates) with minimal monochrome charts; logging pipeline persists every turn with secrets redacted |
 | 13 | Demo Sandbox App | done | CRM (clients, deals, tasks, P&L) with in memory store, its API + OpenAPI spec, embedded Beckon widget with client actions + onIdentify, data-beckon selectors, setup script + happy path readme |
 | 14 | Evals and Quality Gate | done | 27 golden cases across all 9 categories incl. injection defense (retrieved content, impersonation, tool results all treated as data); CI gate definition at docs/ci-workflow.yml (copy to .github/workflows to activate, see D-021), verified locally |
-| 15 | Hardening | not started | |
+| 15 | Hardening | done | strict response headers, gateway retries idempotent reads (never writes), SECURITY.md; injection defense, secret redaction, origin allowlist, encryption, reduced motion, and focus already built in. CSP guidance documented |
 | 16 | Deployment and Self Hosting | not started | |
 | 17 | Activation Checklist | waits on human | the only stop point |
 
