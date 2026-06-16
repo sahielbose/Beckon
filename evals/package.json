@@ -8,6 +8,7 @@
     "eval": "tsx run.ts"
   },
   "dependencies": {
+    "@beckon/agent-core": "workspace:*",
     "@beckon/shared": "workspace:*"
   },
   "devDependencies": {
