@@ -7,10 +7,12 @@
     "dev": "next dev -p 3000",
     "build": "node scripts/copy-embed.mjs && next build",
     "start": "next start -p 3000",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "worker": "tsx src/server/queue/worker.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.4",
+    "@aws-sdk/client-s3": "^3.717.0",
     "@beckon/agent-core": "workspace:*",
     "@beckon/db": "workspace:*",
     "@beckon/embed": "workspace:*",
@@ -18,12 +20,15 @@
     "@beckon/react": "workspace:*",
     "@beckon/shared": "workspace:*",
     "@beckon/ui": "workspace:*",
+    "bullmq": "^5.34.0",
     "drizzle-orm": "^0.38.3",
     "geist": "^1.3.1",
+    "ioredis": "^5.4.2",
     "lucide-react": "^0.469.0",
     "mammoth": "^1.9.0",
     "next": "^15.1.3",
     "next-auth": "5.0.0-beta.25",
+    "resend": "^4.0.1",
     "unpdf": "^0.12.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -36,6 +41,7 @@
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
 }
