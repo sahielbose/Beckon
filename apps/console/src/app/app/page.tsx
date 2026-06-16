@@ -2,7 +2,7 @@ import { AppShell } from "@/components/app/app-shell"
 import { CreateAgentDialog } from "@/components/app/create-agent-dialog"
 import { requireOrgId } from "@/server/current"
 import { listAgents } from "@/server/queries"
-import { Badge, Button, EmptyState } from "@beckon/ui"
+import { Badge, Button, Card, EmptyState, Stagger, StaggerItem } from "@beckon/ui"
 import { Bot } from "lucide-react"
 import Link from "next/link"
 
@@ -13,7 +13,7 @@ export default async function AgentsOverviewPage() {
   return (
     <AppShell>
       <div className="mx-auto max-w-content space-y-8 px-6 py-10">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
           <div className="space-y-1">
             <h1 className="text-2xl font-semibold">Agents</h1>
             <p className="text-sm text-ink-muted">
@@ -31,24 +31,26 @@ export default async function AgentsOverviewPage() {
             action={<CreateAgentDialog trigger={<Button>Create agent</Button>} />}
           />
         ) : (
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {agents.map((agent) => (
-              <li key={agent.id}>
+              <StaggerItem key={agent.id} className="h-full">
                 <Link
                   href={`/app/agents/${agent.id}/playground`}
-                  className="block h-full rounded-lg border border-line bg-bg p-5 shadow-rest transition-colors duration-micro ease-standard hover:bg-bg-subtle"
+                  className="block h-full rounded-lg"
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="font-medium text-ink">{agent.name}</span>
-                    <Badge variant={agent.status === "live" ? "success" : "muted"}>
-                      {agent.status === "live" ? "Live" : "Draft"}
-                    </Badge>
-                  </div>
-                  <p className="mt-2 font-mono text-xs text-ink-faint">{agent.id}</p>
+                  <Card interactive className="h-full p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="truncate font-medium text-ink">{agent.name}</span>
+                      <Badge variant={agent.status === "live" ? "success" : "muted"}>
+                        {agent.status === "live" ? "Live" : "Draft"}
+                      </Badge>
+                    </div>
+                    <p className="mt-2 truncate font-mono text-xs text-ink-faint">{agent.id}</p>
+                  </Card>
                 </Link>
-              </li>
+              </StaggerItem>
             ))}
-          </ul>
+          </Stagger>
         )}
       </div>
     </AppShell>

@@ -64,9 +64,12 @@ export default async function TeamSettingsPage() {
           <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
             Pending invites
           </h3>
-          <ul className="divide-y divide-line rounded-lg border border-line">
+          <ul className="divide-y divide-line overflow-hidden rounded-lg border border-line">
             {invites.map((invite) => (
-              <li key={invite.id} className="flex items-center justify-between gap-4 px-4 py-3">
+              <li
+                key={invite.id}
+                className="flex items-center justify-between gap-4 px-4 py-3 transition-colors duration-micro ease-standard hover:bg-bg-subtle"
+              >
                 <div className="space-y-0.5">
                   <span className="text-sm text-ink">{invite.email}</span>
                   <p className="text-xs text-ink-faint">Invited as {invite.role}</p>

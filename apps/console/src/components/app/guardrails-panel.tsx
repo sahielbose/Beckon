@@ -74,9 +74,12 @@ export function GuardrailsPanel({
             description="Import tools on the Tools tab, then block any the agent should never call."
           />
         ) : (
-          <ul className="divide-y divide-line rounded-lg border border-line">
+          <ul className="divide-y divide-line overflow-hidden rounded-lg border border-line">
             {tools.map((tool) => (
-              <li key={tool.name} className="flex items-center justify-between gap-4 px-4 py-3">
+              <li
+                key={tool.name}
+                className="flex items-center justify-between gap-4 px-4 py-3 transition-colors duration-micro ease-standard hover:bg-bg-subtle"
+              >
                 <div>
                   <span className="font-medium text-ink">{tool.name}</span>
                   {tool.sideEffect ? (

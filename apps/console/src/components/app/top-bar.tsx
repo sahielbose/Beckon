@@ -5,7 +5,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@beckon/ui"
@@ -51,22 +50,22 @@ export function TopBar({
   const initial = (userName ?? userEmail ?? "?").charAt(0).toUpperCase()
 
   return (
-    <header className="flex items-center justify-between border-b border-line px-6 py-3">
-      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm">
+    <header className="sticky top-0 z-20 flex items-center justify-between border-b border-line bg-bg/95 py-3 pr-4 pl-16 backdrop-blur sm:pr-6 md:pl-6">
+      <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1.5 truncate text-sm">
         {crumbs.map((crumb, i) => (
           <span key={`${crumb.label}-${i}`} className="flex items-center gap-1.5">
             {i > 0 ? (
-              <ChevronRight className="h-3.5 w-3.5 text-ink-faint" aria-hidden="true" />
+              <ChevronRight className="h-3.5 w-3.5 shrink-0 text-ink-faint" aria-hidden="true" />
             ) : null}
             {crumb.href ? (
               <Link
                 href={crumb.href}
-                className="text-ink-muted transition-colors duration-micro ease-standard hover:text-ink"
+                className="rounded-sm text-ink-muted transition-colors duration-micro ease-standard hover:text-ink"
               >
                 {crumb.label}
               </Link>
             ) : (
-              <span className="font-medium text-ink">{crumb.label}</span>
+              <span className="truncate font-medium text-ink">{crumb.label}</span>
             )}
           </span>
         ))}
@@ -77,13 +76,16 @@ export function TopBar({
           <button
             type="button"
             aria-label="Account menu"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-bg-subtle text-sm font-medium text-ink transition-colors duration-micro ease-standard hover:bg-bg"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-bg-subtle text-sm font-medium text-ink transition-colors duration-micro ease-standard hover:border-line-strong hover:bg-bg"
           >
             {initial}
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>{userName ?? userEmail}</DropdownMenuLabel>
+          <div className="px-2 py-1.5">
+            {userName ? <p className="truncate text-sm font-medium text-ink">{userName}</p> : null}
+            <p className="truncate text-xs text-ink-muted">{userEmail}</p>
+          </div>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/app/settings">Settings</Link>

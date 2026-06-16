@@ -103,10 +103,13 @@ export function InstallManager({
             description="Add the origin of the site where the widget will run."
           />
         ) : (
-          <ul className="divide-y divide-line rounded-lg border border-line">
+          <ul className="divide-y divide-line overflow-hidden rounded-lg border border-line">
             {origins.map((origin) => (
-              <li key={origin.id} className="flex items-center justify-between gap-4 px-4 py-2.5">
-                <code className="font-mono text-sm text-ink">{origin.origin}</code>
+              <li
+                key={origin.id}
+                className="flex items-center justify-between gap-4 px-4 py-2.5 transition-colors duration-micro ease-standard hover:bg-bg-subtle"
+              >
+                <code className="truncate font-mono text-sm text-ink">{origin.origin}</code>
                 <form action={removeOriginAction}>
                   <input type="hidden" name="agentId" value={agentId} />
                   <input type="hidden" name="originId" value={origin.id} />

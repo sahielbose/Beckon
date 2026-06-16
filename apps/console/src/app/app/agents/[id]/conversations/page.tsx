@@ -40,11 +40,11 @@ export default async function ConversationsPage({ params }: { params: Promise<{ 
           </TableHeader>
           <TableBody>
             {conversations.map((c) => (
-              <TableRow key={c.id}>
+              <TableRow key={c.id} className="group">
                 <TableCell>
                   <Link
                     href={`/app/agents/${id}/conversations/${c.id}`}
-                    className="font-medium text-ink underline-offset-4 hover:underline"
+                    className="font-medium text-ink underline-offset-4 hover:underline focus-visible:underline"
                   >
                     {new Date(c.startedAt).toLocaleString()}
                   </Link>

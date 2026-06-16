@@ -88,9 +88,12 @@ export function FlowBuilder({
             description="Create a flow to steer the agent through ordered steps with the right tools."
           />
         ) : (
-          <ul className="divide-y divide-line rounded-lg border border-line">
+          <ul className="divide-y divide-line overflow-hidden rounded-lg border border-line">
             {flows.map((flow) => (
-              <li key={flow.id} className="flex items-center justify-between gap-4 px-4 py-3">
+              <li
+                key={flow.id}
+                className="flex items-center justify-between gap-4 px-4 py-3 transition-colors duration-micro ease-standard hover:bg-bg-subtle"
+              >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-ink">{flow.name}</span>
