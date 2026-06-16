@@ -13,6 +13,7 @@
     "@auth/drizzle-adapter": "^1.7.4",
     "@beckon/agent-core": "workspace:*",
     "@beckon/db": "workspace:*",
+    "@beckon/gateway": "workspace:*",
     "@beckon/shared": "workspace:*",
     "@beckon/ui": "workspace:*",
     "drizzle-orm": "^0.38.3",
@@ -27,7 +28,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@types/node": "^22.10.2",
+    "@types/node": "^20.17.0",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "autoprefixer": "^10.4.20",

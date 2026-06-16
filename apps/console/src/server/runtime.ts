@@ -4,7 +4,7 @@ import {
   type TurnLogger,
   selectProvider,
 } from "@beckon/agent-core"
-import { MockServerExecutor, globalPendingRegistry } from "@beckon/agent-core"
+import { globalPendingRegistry } from "@beckon/agent-core"
 import {
   actionEvents as actionEventsTable,
   agents,
@@ -13,11 +13,13 @@ import {
   clientActions as clientActionsTable,
   conversations,
   db,
+  gatewayConfigs as gatewayConfigsTable,
   guardrails as guardrailsTable,
   messages as messagesTable,
   toolCalls as toolCallsTable,
   tools as toolsTable,
 } from "@beckon/db"
+import { type GatewayConfig, GatewayServerExecutor } from "@beckon/gateway"
 import {
   type ClientActionDefinition,
   type ClientToolDeclaration,
@@ -65,6 +67,28 @@ export async function validateEmbed(
 
   await db.update(apiKeys).set({ lastUsedAt: new Date() }).where(eq(apiKeys.id, row.id))
   return { agentId: row.agentId }
+}
+
+/** Load the gateway config for an agent, ready for the gateway executor. */
+export async function loadGatewayConfig(agentId: string): Promise<GatewayConfig | null> {
+  const row = (
+    await db
+      .select()
+      .from(gatewayConfigsTable)
+      .where(eq(gatewayConfigsTable.agentId, agentId))
+      .limit(1)
+  )[0]
+  if (!row) return null
+  return {
+    agentId,
+    baseUrl: row.baseUrl,
+    authType: row.authType,
+    authHeaderName: row.authHeaderName,
+    authSecretEncrypted: row.authSecretEncrypted,
+    sharedSecretEncrypted: row.sharedSecretEncrypted,
+    rateLimitPerMin: row.rateLimitPerMin,
+    allowedOperations: row.allowedOperations,
+  }
 }
 
 export async function loadGuardrails(agentId: string): Promise<GuardrailConfig> {
@@ -177,10 +201,11 @@ export async function buildRunContext(input: BuildContextInput): Promise<RunCont
   const agent = (await db.select().from(agents).where(eq(agents.id, input.agentId)).limit(1))[0]
   if (!agent) return null
 
-  const [guardrails, tools, history] = await Promise.all([
+  const [guardrails, tools, history, gatewayConfig] = await Promise.all([
     loadGuardrails(input.agentId),
     loadRuntimeTools(input.agentId, input.clientTools, input.clientActions),
     loadHistory(input.conversationId),
+    loadGatewayConfig(input.agentId),
   ])
 
   const provider = await selectProvider(agent.model)
@@ -197,7 +222,8 @@ export async function buildRunContext(input: BuildContextInput): Promise<RunCont
     tools,
     guardrails,
     provider,
-    serverExecutor: new MockServerExecutor(),
+    // Every server tool call goes through the gateway.
+    serverExecutor: new GatewayServerExecutor(gatewayConfig),
     pending: globalPendingRegistry,
     retrieve: makeRetriever(input.agentId),
   }
