@@ -4,6 +4,21 @@ Engineering decisions made while building Beckon that are not spelled out in the
 context document or the implementation guide. Newest at the top. Each entry: what was
 decided, and why.
 
+## 2026-06-15 (Section 9)
+
+- **D-019 Install snippet carries the public embed token.** The widget authenticates
+  with the scoped public embed token (bpk_), which is safe to expose in client side
+  code because it is public, scoped to one agent, and validated against the agent's
+  origin allowlist. The provider takes agentId, token, and apiUrl. This is the secure
+  model from Section 3. The session endpoint also supports an agentId only flow
+  (validated by origin alone) for the simplest setups.
+
+- **D-020 The embed mounts the React widget into a Shadow DOM.** embed.js renders the
+  same React widget into a shadow root and injects the compiled CSS there, so the host
+  page's styles cannot leak in and the widget's styles cannot leak out. Built with
+  tsup. This reuses one widget implementation rather than maintaining a separate
+  vanilla build.
+
 ## 2026-06-15 (Section 6)
 
 - **D-016 Provider abstraction with a stub default.** `agent-core` defines a
