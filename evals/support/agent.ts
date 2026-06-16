@@ -52,6 +52,7 @@ export async function runTurnCollect(opts: {
   guardrails?: GuardrailConfig
   confirm?: boolean
   retrieve?: RunContext["retrieve"]
+  flowAllowedTools?: string[] | null
 }): Promise<TurnResult> {
   const executed: string[] = []
   const executor = new MockServerExecutor((tool) => {
@@ -72,6 +73,7 @@ export async function runTurnCollect(opts: {
     serverExecutor: executor,
     pending: scriptedPending({ confirm: opts.confirm ?? true }),
     retrieve: opts.retrieve,
+    flowAllowedTools: opts.flowAllowedTools ?? null,
   }
 
   const events: StreamEvent[] = []
