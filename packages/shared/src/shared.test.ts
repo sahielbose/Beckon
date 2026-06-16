@@ -44,7 +44,10 @@ describe("isToolAllowed", () => {
 
   it("never allows a blocked tool, even if allow listed", () => {
     expect(
-      isToolAllowed({ ...base, allowedTools: ["deleteAccount"], blockedTools: ["deleteAccount"] }, "deleteAccount"),
+      isToolAllowed(
+        { ...base, allowedTools: ["deleteAccount"], blockedTools: ["deleteAccount"] },
+        "deleteAccount",
+      ),
     ).toBe(false)
   })
 
